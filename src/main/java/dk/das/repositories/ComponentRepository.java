@@ -7,4 +7,8 @@ import org.springframework.data.repository.CrudRepository;
  * Created by Chris on 15-Nov-17.
  */
 public interface ComponentRepository extends CrudRepository<Component, Long> {
+
+     Component findByUniqueCode(String uniqueCode);
+
+
 }
