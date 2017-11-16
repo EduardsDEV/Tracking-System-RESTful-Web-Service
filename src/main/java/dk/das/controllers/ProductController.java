@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by Chris on 15-Nov-17.
@@ -29,13 +30,12 @@ public class ProductController {
 
     @PostMapping("/product")
     public Product save(@RequestParam String uniqueCode,
-                        @RequestParam String componentUniqueCode) {
+                        @RequestParam(name = "componentsUniqueCodes[]") String[] componentsUniqueCodes) {
         Product p = new Product();
         p.setUniqueCode(uniqueCode);
-        Component c = componentRepository.findByUniqueCode(componentUniqueCode);
-        if (c != null) {
-            p.setComponents(Arrays.asList(c));
-
+        Collection<Component> c = componentRepository.findAllByUniqueCodeIn(Arrays.asList(componentsUniqueCodes));
+        if (c != null && c.size() >= 0) {
+            p.setComponents(c);
             productRepository.save(p);
         } else {
             return null;
