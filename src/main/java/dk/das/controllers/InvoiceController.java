@@ -60,15 +60,7 @@ public class InvoiceController {
         customerRepository.save(customer);
         invoice.setCustomer(customer);
 
-        Collection<Product> productsByUniqueCode = new LinkedList<>();
-        Iterable<Product> allProducts = productRepository.findAll();
-        for (Product product : allProducts) {
-            for (String productsUniqueCode : productsUniqueCodes) {
-                if (product.getUniqueCode().equals(productsUniqueCode)) {
-                    productsByUniqueCode.add(product);
-                }
-            }
-        }
+        Collection<Product> productsByUniqueCode = productRepository.findAllByUniqueCodeIn(Arrays.asList(productsUniqueCodes));
         if (productsByUniqueCode.size() == productsUniqueCodes.length) {
             invoice.setProducts(productsByUniqueCode);
         } else {
